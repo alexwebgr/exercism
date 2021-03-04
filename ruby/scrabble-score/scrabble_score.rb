@@ -15,27 +15,27 @@ class Scrabble
     "M" => 3, "Z" => 10
   }
 
-  def self.score(word)
-    new(word).score
+  def self.score(tiles)
+    new(tiles).score
   end
 
   private
 
-  attr_reader :word
+  attr_reader :tiles
   attr_reader :tile_set
 
-  def initialize(word, tile_set = TILE_SET)
-    @word = word.to_s.gsub(/[^a-zA-Z]/, '').upcase
+  def initialize(tiles, tile_set = TILE_SET)
+    @tiles = tiles.to_s.scan(/[a-z]/i)
     @tile_set = tile_set
   end
 
   public
 
   def score
-    return 0 if word.empty?
+    return 0 if tiles.empty?
 
-    word.chars.tally.sum do |letter|
-      tile_set[letter[0]] * letter[1]
+    tiles.tally.sum do |letter|
+      tile_set[letter[0].upcase] * letter[1]
     end
   end
 end
