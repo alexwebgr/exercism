@@ -25,7 +25,7 @@ class Scrabble
   attr_reader :tile_set
 
   def initialize(tiles, tile_set = TILE_SET)
-    @tiles = tiles.to_s.scan(/[a-z]/i)
+    @tiles = tiles.to_s.scan(/[[:alpha:]]/)
     @tile_set = tile_set
   end
 
