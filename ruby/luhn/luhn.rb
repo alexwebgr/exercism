@@ -1,29 +1,41 @@
 class Luhn
   THRESHOLD = 9
 
-  def self.valid?(num)
-    return false if num.gsub(/\s+/, '').length <= 1
-    return false if num.match(/[^0-9 ]/)
+  attr_reader :candidate
 
-    (add_em_up(num) % 10).zero?
+  def self.valid?(candidate)
+    new(candidate).valid?
   end
 
   private
 
-  def self.add_em_up(num)
+  def initialize(candidate)
+    @candidate = candidate
+  end
+
+  def add_em_up
     sum = 0
-    numbers = num.scan(/[\d+]/)
+    numbers = candidate.scan(/[\d+]/)
     numbers.reverse.each_with_index do |number, index|
-      sum += threshold_check(number.to_i) if index % 2
+      sum += threshold_check(number.to_i) if index.even?
     end
 
     sum
   end
 
-  def self.threshold_check(number)
+  def threshold_check(number)
     sum = number * 2
     sum -= THRESHOLD if sum > THRESHOLD
 
     sum
+  end
+
+  public
+
+  def valid?
+    return false if candidate.gsub(/\s+/, '').length <= 1
+    return false if candidate.match(/[^0-9 ]/)
+
+    (add_em_up % 10).zero?
   end
 end
