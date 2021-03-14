@@ -17,7 +17,7 @@ class Luhn
     sum = 0
     numbers = candidate.scan(/[\d+]/)
     numbers.reverse.each_with_index do |number, index|
-      sum += threshold_check(number.to_i) if index.even?
+      sum += index.odd? ? threshold_check(number.to_i) : number.to_i
     end
 
     sum
