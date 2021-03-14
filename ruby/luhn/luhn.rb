@@ -17,17 +17,21 @@ class Luhn
     sum = 0
     numbers = candidate.scan(/[\d+]/)
     numbers.reverse.each_with_index do |number, index|
-      sum += index.odd? ? threshold_check(number.to_i) : number.to_i
+      sum += index.odd? ? doubler(number.to_i) : number.to_i
     end
 
     sum
   end
 
-  def threshold_check(number)
+  def doubler(number)
     sum = number * 2
-    sum -= THRESHOLD if sum > THRESHOLD
+    sum -= THRESHOLD if above_threshold?(sum)
 
     sum
+  end
+
+  def above_threshold?(sum)
+    sum > THRESHOLD
   end
 
   public
