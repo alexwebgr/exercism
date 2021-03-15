@@ -1,13 +1,13 @@
 class Luhn
   THRESHOLD = 9
 
-  attr_reader :candidate
-
   def self.valid?(candidate)
     new(candidate).valid?
   end
 
   private
+
+  attr_reader :candidate
 
   def initialize(candidate)
     @candidate = candidate
