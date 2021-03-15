@@ -3,39 +3,34 @@ class Clock
   private
 
   def initialize(hour: 0, minute: 0)
-    @hour = hour
-    @minute = minute
+    @total_minutes = hour * 60 + minute
   end
 
-  def display(hour, minute)
-    total_minutes = hour * 60 + minute
-    "%02d:%02d" % [(total_minutes / 60) % 24, total_minutes % 60]
+  def display(minutes)
+    "%02d:%02d" % [(minutes / 60) % 24, minutes % 60]
   end
 
   protected
 
-  attr_accessor :hour
-  attr_accessor :minute
+  attr_accessor :total_minutes
 
   public
 
   def ==(object)
-    display(object.hour, object.minute) == display(hour, minute)
+    display(object.total_minutes) == display(total_minutes)
   end
 
   def -(object)
-    @minute -= object.minute
-    @hour -= object.hour
+    @total_minutes -= object.total_minutes
     self
   end
 
   def +(object)
-    @hour += object.hour
-    @minute += object.minute
+    @total_minutes += object.total_minutes
     self
   end
 
   def to_s
-    display(hour, minute)
+    display(total_minutes)
   end
 end
