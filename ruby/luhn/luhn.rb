@@ -15,29 +15,29 @@ class Luhn
 
   def add_em_up
     sum = 0
-    numbers = candidate.scan(/[\d+]/)
-    numbers.reverse.each_with_index do |number, index|
-      sum += index.odd? ? doubler(number.to_i) : number.to_i
+    digits = candidate.scan(/[\d+]/)
+    digits.reverse.each_with_index do |digit, index|
+      sum += index.odd? ? doubler(digit.to_i) : digit.to_i
     end
 
     sum
   end
 
-  def doubler(number)
-    sum = number * 2
-    sum -= THRESHOLD if above_threshold?(sum)
+  def doubler(digit)
+    product = digit * 2
+    product -= THRESHOLD if above_threshold?(product)
 
-    sum
+    product
   end
 
-  def above_threshold?(sum)
-    sum > THRESHOLD
+  def above_threshold?(product)
+    product > THRESHOLD
   end
 
   public
 
   def valid?
-    return false if candidate.gsub(/\s+/, '').length <= 1
+    return false if candidate.delete(' ').length <= 1
     return false if candidate.match(/[^0-9 ]/)
 
     (add_em_up % 10).zero?
