@@ -1,6 +1,4 @@
 class Clock
-  attr_accessor :hour
-  attr_accessor :minute
 
   private
 
@@ -13,6 +11,11 @@ class Clock
     total_minutes = hour * 60 + minute
     "%02d:%02d" % [(total_minutes / 60) % 24, total_minutes % 60]
   end
+
+  protected
+
+  attr_accessor :hour
+  attr_accessor :minute
 
   public
 
