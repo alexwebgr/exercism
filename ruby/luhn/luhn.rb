@@ -14,13 +14,8 @@ class Luhn
   end
 
   def add_em_up
-    sum = 0
     digits = candidate.scan(/[\d+]/)
-    digits.reverse.each_with_index do |digit, index|
-      sum += index.odd? ? doubler(digit.to_i) : digit.to_i
-    end
-
-    sum
+    digits.reverse.map.with_index { |digit, index| index.odd? ? doubler(digit.to_i) : digit.to_i }.sum
   end
 
   def doubler(digit)
