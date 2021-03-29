@@ -9,9 +9,23 @@ To get started with TDD, see the `README.md` file in your
 class Pangram
   ALPHABET = ('a'..'z').to_a
 
+  private
+
+  attr_reader :sentence
+
+  def initialize(sentence)
+    @sentence = sentence
+  end
+
   def self.pangram?(sentence)
+    new(sentence).pangram?
+  end
+
+  public
+
+  def pangram?
     return false if sentence.empty?
 
-    sentence.downcase.gsub(/[^a-z]/, '').chars.tally.size == ALPHABET.size
+    sentence.downcase.scan(/[a-z]/).tally.size == ALPHABET.size
   end
 end
