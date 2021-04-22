@@ -6,8 +6,12 @@ class Clock
     @minutes = hour * 60 + minute
   end
 
+  def calc(minutes)
+    [(minutes / 60) % 24, minutes % 60]
+  end
+
   def display(minutes)
-    '%02d:%02d' % [(minutes / 60) % 24, minutes % 60]
+    '%02d:%02d' % calc(minutes)
   end
 
   protected
@@ -17,7 +21,7 @@ class Clock
   public
 
   def ==(other)
-    display(other.minutes) == display(minutes)
+    calc(other.minutes) == calc(minutes)
   end
 
   def -(other)
