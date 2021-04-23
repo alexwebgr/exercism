@@ -25,13 +25,11 @@ class Clock
   end
 
   def -(other)
-    @minutes -= other.minutes
-    self
+    Clock.new(minute: @minutes - other.minutes)
   end
 
   def +(other)
-    @minutes += other.minutes
-    self
+    Clock.new(minute: @minutes + other.minutes)
   end
 
   def to_s
