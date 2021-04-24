@@ -1,19 +1,20 @@
 # frozen_string_literal: true
+require 'humanize'
 
 class TwelveDays
   LAST_ITEM = [1, "a Partridge in a Pear Tree."]
   ITEMS = [
-    [2, "two Turtle Doves"],
-    [3, "three French Hens"],
-    [4, "four Calling Birds"],
-    [5, "five Gold Rings"],
-    [6, "six Geese-a-Laying"],
-    [7, "seven Swans-a-Swimming"],
-    [8, "eight Maids-a-Milking"],
-    [9, "nine Ladies Dancing"],
-    [10, "ten Lords-a-Leaping"],
-    [11, "eleven Pipers Piping"],
-    [12, "twelve Drummers Drumming"],
+    [2, "Turtle Doves"],
+    [3, "French Hens"],
+    [4, "Calling Birds"],
+    [5, "Gold Rings"],
+    [6, "Geese-a-Laying"],
+    [7, "Swans-a-Swimming"],
+    [8, "Maids-a-Milking"],
+    [9, "Ladies Dancing"],
+    [10, "Lords-a-Leaping"],
+    [11, "Pipers Piping"],
+    [12, "Drummers Drumming"],
   ]
 
   ORDINAL_NUMBERS = {
@@ -49,7 +50,7 @@ class TwelveDays
     items = []
 
     ITEMS.map do |item|
-      items.prepend(item.last)
+      items.prepend([item.first.humanize, item.last].join(' '))
       verse(prefix(item.first), items.join(', '), suffix)
     end
   end
