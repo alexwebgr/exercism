@@ -1,16 +1,21 @@
 class BeerSong
-  attr_reader :amount
+  attr_reader :start
   attr_reader :length
 
-  GENERIC_THRESHOLD = 2
   VERSES = {
     2 => :verse_2_bottles,
     1 => :verse_1_bottle,
     0 => :verse_0_bottles
   }
 
-  def initialize(amount = 99, length = 100)
-    @amount = amount
+  def self.recite(start, length)
+    new(start, length).recite
+  end
+
+  private
+
+  def initialize(start = 99, length = 100)
+    @start = start
     @length = length
   end
 
@@ -42,30 +47,14 @@ class BeerSong
     ].join("\n")
   end
 
-  def self.recite(amount, length)
-    new(amount, length).recite
+  def verse(number)
+    VERSES.key?(number) ? send(VERSES[number]) : generic_verse(number)
   end
 
+  public
+
   def recite
-    verses = []
-
-    if VERSES.key?(amount)
-      if length > 1
-        amount.downto(0) { |time| verses << send(VERSES[time]) }
-      else
-        verses << send(VERSES[amount])
-      end
-    else
-      length.times do |time|
-        current_time = amount - time
-        if current_time <= GENERIC_THRESHOLD
-          verses << send(VERSES[current_time])
-        else
-          verses << generic_verse(current_time)
-        end
-      end
-    end
-
-    verses.join("\n\n") + "\n"
+    ending = start + 1 - length
+    start.downto(ending).map { |number| verse(number) }.join("\n\n") + "\n"
   end
 end
