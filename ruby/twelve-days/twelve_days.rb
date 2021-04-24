@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
 class TwelveDays
-  LAST_ITEM = "a Partridge in a Pear Tree."
+  LAST_ITEM = [1, "a Partridge in a Pear Tree."]
   ITEMS = [
-    "two Turtle Doves",
-    "three French Hens",
-    "four Calling Birds",
-    "five Gold Rings",
-    "six Geese-a-Laying",
-    "seven Swans-a-Swimming",
-    "eight Maids-a-Milking",
-    "nine Ladies Dancing",
-    "ten Lords-a-Leaping",
-    "eleven Pipers Piping",
-    "twelve Drummers Drumming",
+    [2, "two Turtle Doves"],
+    [3, "three French Hens"],
+    [4, "four Calling Birds"],
+    [5, "five Gold Rings"],
+    [6, "six Geese-a-Laying"],
+    [7, "seven Swans-a-Swimming"],
+    [8, "eight Maids-a-Milking"],
+    [9, "nine Ladies Dancing"],
+    [10, "ten Lords-a-Leaping"],
+    [11, "eleven Pipers Piping"],
+    [12, "twelve Drummers Drumming"],
   ]
 
   ORDINAL_NUMBERS = {
@@ -35,17 +35,23 @@ class TwelveDays
     new.song
   end
 
-  def song
+  private
+
+  def verse(head, body, tail = nil)
+    [head, body, tail].join
+  end
+
+  def first
+    [verse(prefix(LAST_ITEM.first), LAST_ITEM.last)]
+  end
+
+  def rest
     items = []
-    verses = []
-    verses << [prefix(1), LAST_ITEM].join
 
-    ITEMS.each_with_index do |item, index|
-      items.prepend(item)
-      verses << [prefix(index + 2), items.join(', '), suffix].join
+    ITEMS.map do |item|
+      items.prepend(item.last)
+      verse(prefix(item.first), items.join(', '), suffix)
     end
-
-    verses.join("\n\n") + "\n"
   end
 
   def prefix(i)
@@ -53,6 +59,12 @@ class TwelveDays
   end
 
   def suffix
-    ", and #{LAST_ITEM}"
+    ", and #{LAST_ITEM.last}"
+  end
+
+  public
+
+  def song
+    [].concat(first, rest).join("\n\n") + "\n"
   end
 end
