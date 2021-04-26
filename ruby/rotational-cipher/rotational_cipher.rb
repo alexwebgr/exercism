@@ -1,8 +1,9 @@
 class RotationalCipher
-  attr_reader :characters
-  attr_reader :position
   ALPHABET = ('a'..'z').to_a
   ALPHABET_CAP = ('A'..'Z').to_a
+
+  attr_reader :characters
+  attr_reader :position
 
   def self.rotate(characters, position)
     new(characters, position).rotate
@@ -23,9 +24,8 @@ class RotationalCipher
     return char if current_position.nil?
 
     target_position = current_position + position
-    target_position >= charset.length ? target_position -= charset.length : target_position
 
-    charset[target_position]
+    charset.rotate(target_position).first
   end
 
   def rotate
