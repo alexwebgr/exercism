@@ -15,7 +15,7 @@ class IsbnVerifier
   end
 
   def valid?
-    digits_sum = digits.map.with_index { |digit, index| digit.to_i * (ISBN_LENGTH - index) }.sum
+    digits_sum = digits.map.with_index.sum { |digit, index| digit.to_i * (ISBN_LENGTH - index) }
     digits_sum += control_digit(digits_sum)
 
     (digits_sum % MODULO).zero?
@@ -26,7 +26,7 @@ class IsbnVerifier
 
   def digits
     digits = code.scan(/[0-9]/)
-    raise ParsingError, 'input length has to be 10 characters' if digits.empty? || code.gsub(/-/, '').length != ISBN_LENGTH
+    raise ParsingError, 'input length has to be 10 characters' if digits.empty? || code.delete('-').length != ISBN_LENGTH
     # we assume that after selecting just numbers there should be 9 characters
     raise ParsingError, 'input contains invalid characters' if digits.size < ISBN_LENGTH - 1
 
