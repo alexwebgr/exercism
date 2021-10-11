@@ -27,17 +27,13 @@ class IsbnVerifier
     (digits_sum % MODULO).zero?
   end
 
-  def length_valid?
-    digits.empty? || code.delete('-').length != ISBN_LENGTH
-  end
-
   def digits
-    digits = code.scan(/[0-9]/)
-    return false if length_valid?
+    code_digits = code.scan(/[0-9]/)
+    return false if code_digits.empty? || code.delete('-').length != ISBN_LENGTH
     # we assume that after selecting just numbers there should be 9 characters
-    return false if digits.size < ISBN_LENGTH - 1
+    return false if code_digits.size < ISBN_LENGTH - 1
 
-    digits
+    code_digits
   end
 
   def control_digit(digits_sum)
