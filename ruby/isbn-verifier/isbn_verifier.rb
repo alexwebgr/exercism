@@ -4,14 +4,16 @@ class IsbnVerifier
   ISBN_LENGTH = 10
   MODULO = ISBN_LENGTH + 1
 
+  def self.valid?(code)
+    new(code).valid?
+  end
+
+  private
+
   attr_reader :code
 
   def initialize(code)
     @code = code
-  end
-
-  def self.valid?(code)
-    new(code).valid?
   end
 
   def digits_sum
@@ -22,15 +24,10 @@ class IsbnVerifier
     digits_sum + control
   end
 
-  def valid?
-    return false unless digits_sum
-    (digits_sum % MODULO).zero?
-  end
-
   def digits
     code_digits = code.scan(/[0-9]/)
     return false if code_digits.empty? || code.delete('-').length != ISBN_LENGTH
-    # we assume that after selecting just numbers there should be 9 characters
+    # we assume that after selecting just numbers there should be 9 characters.
     return false if code_digits.size < ISBN_LENGTH - 1
 
     code_digits
@@ -42,5 +39,12 @@ class IsbnVerifier
     return false if remainder.zero?
 
     MODULO - remainder
+  end
+
+  public
+
+  def valid?
+    return false unless digits_sum
+    (digits_sum % MODULO).zero?
   end
 end

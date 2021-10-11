@@ -1,0 +1,19 @@
+name: 'Deploy'
+description: 'Submit the exercise'
+inputs:
+  api_token:
+    description: 'The api token'
+    required: true
+  ex_path:
+    description: 'Path to the exercise'
+    required: true
+  ex_name:
+    description: 'Filename of the exercise'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+    EXERCISM_API: ${{ inputs.api_token }}
+    EXERCISE_PATH: ${{ inputs.ex_path }}
+    EXERCISE_NAME: ${{ inputs.ex_name }}
