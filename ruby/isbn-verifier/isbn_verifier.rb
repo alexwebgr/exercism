@@ -11,26 +11,18 @@ class IsbnVerifier
   private
 
   attr_reader :code
+  attr_reader :digits
 
   def initialize(code)
     @code = code
+    @digits = code.scan(/[0-9]/)
   end
 
   def digits_sum
-    return false unless digits
     digits_sum = digits.map.with_index.sum { |digit, index| digit.to_i * (ISBN_LENGTH - index) }
     control = control_digit(digits_sum)
     return false unless control
     digits_sum + control
-  end
-
-  def digits
-    code_digits = code.scan(/[0-9]/)
-    return false if code_digits.empty? || code.delete('-').length != ISBN_LENGTH
-    # we assume that after selecting just numbers there should be 9 characters.
-    return false if code_digits.size < ISBN_LENGTH - 1
-
-    code_digits
   end
 
   def control_digit(digits_sum)
@@ -41,9 +33,18 @@ class IsbnVerifier
     MODULO - remainder
   end
 
+  def digits_valid?
+    return false if digits.empty? || code.delete('-').length != ISBN_LENGTH
+    # we assume that after selecting just numbers there should be 9 characters.
+    return false if digits.size < ISBN_LENGTH - 1
+
+    true
+  end
+
   public
 
   def valid?
+    return false unless digits_valid?
     return false unless digits_sum
     (digits_sum % MODULO).zero?
   end
