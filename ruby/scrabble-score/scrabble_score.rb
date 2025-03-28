@@ -34,8 +34,8 @@ class Scrabble
   def score
     return 0 if tiles.empty?
 
-    tiles.tally.sum do |letter|
-      tile_set[letter[0].upcase] * letter[1]
+    tiles.tally.sum do |key, letter|
+      tile_set[key.upcase] * letter
     end
   end
 end

@@ -1,51 +1,53 @@
-class ParsingError < StandardError; end
-
 class IsbnVerifier
-  ISBN_LENGTH = 10
-  MODULO = ISBN_LENGTH + 1
-
   def self.valid?(code)
     new(code).valid?
   end
 
   private
 
+  ISBN_LENGTH = 10
+  MODULO = ISBN_LENGTH + 1
+  CONTROL_CHARACTER = 'X'
+
   attr_reader :code
-  attr_reader :digits
 
   def initialize(code)
-    @code = code
-    @digits = code.scan(/[0-9]/)
+    @code = code.gsub(/[-\s]/, '')
   end
 
-  def digits_sum
-    digits_sum = digits.map.with_index.sum { |digit, index| digit.to_i * (ISBN_LENGTH - index) }
-    control = control_digit(digits_sum)
-    return false unless control
-    digits_sum + control
+  # Check if the ISBN is exactly 10 characters long
+  def length_valid?
+    code.length == ISBN_LENGTH
   end
 
-  def control_digit(digits_sum)
-    return 0 unless code[-1].downcase == 'x'
-    remainder = (digits_sum % MODULO)
-    return false if remainder.zero?
-
-    MODULO - remainder
+  # Check if the first 9 characters are digits and the last one is a digit or 'X'
+  def characters_valid?
+    code.match?(/^\d{9}[\d#{CONTROL_CHARACTER}]$/)
   end
 
-  def digits_valid?
-    return false if digits.empty? || code.delete('-').length != ISBN_LENGTH
-    # we assume that after selecting just numbers there should be 9 characters.
-    return false if digits.size < ISBN_LENGTH - 1
+  def control_character?(index, character)
+    index == ISBN_LENGTH - 1 && character == CONTROL_CHARACTER
+  end
 
-    true
+  # Calculate the sum
+  def sum
+    code.chars.each_with_index.reduce(0) do |sum, (character, index)|
+      value = control_character?(index, character) ? ISBN_LENGTH : character.to_i
+      sum + value * (ISBN_LENGTH - index)
+    end
+  end
+
+  # Check if the sum is divisible by 11
+  def valid_sum?
+    sum % MODULO == 0
   end
 
   public
 
   def valid?
-    return false unless digits_valid?
-    return false unless digits_sum
-    (digits_sum % MODULO).zero?
+    return false unless length_valid?
+    return false unless characters_valid?
+
+    valid_sum?
   end
 end

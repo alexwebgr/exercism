@@ -7,11 +7,17 @@ To get started with TDD, see the `README.md` file in your
 =end
 
 class Year
-  def leap?(year)
-    year % 4
+  attr_reader :year
+
+  def self.leap?(year)
+    new(year).leap?
   end
 
-  def check(year)
-    year % 400
+  def initialize(year)
+    @year = year
+  end
+
+  def leap?
+    (year % 4).zero? && (year % 100 != 0 || year % 400 == 0)
   end
 end
