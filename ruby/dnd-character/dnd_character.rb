@@ -9,27 +9,25 @@ To get started with TDD, see the `README.md` file in your
 class DndCharacter
   HIT_POINT = 10
   ABILITIES = %w[strength dexterity constitution intelligence wisdom charisma]
+  attr_reader *ABILITIES
 
-  def self.modifier
-    new.modifier
+  def self.modifier(constitution)
+    ((constitution - 10) / 2).floor
   end
 
-  def modifier
-    scores = generate_ability_score
-    HIT_POINT + constitution_modifier(scores["constitution"])
+  def initialize
+    ABILITIES.each { |attr| instance_variable_set("@#{attr}", generate_ability_score) }
+  end
+
+  def hitpoints
+    HIT_POINT + self.class.modifier(@constitution)
   end
 
   def generate_ability_score
-    ABILITIES.each_with_object({}) do |ability, memo|
-      memo[ability] = (1..4).map { dice_roll }.sort[1..3].sum
-    end
+    4.times.map { dice_roll }.sort[1..3].sum
   end
 
   def dice_roll
     rand(1..6)
-  end
-
-  def constitution_modifier(constitution)
-    ((constitution - 10) / 2).floor
   end
 end
