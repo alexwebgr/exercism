@@ -10,7 +10,7 @@ class DndCharacter
   private
 
   def initialize
-    ABILITIES.each { |attr| instance_variable_set("@#{attr}", ability_score) }
+    ABILITIES.each { |ability| instance_variable_set("@#{ability}", ability_score) }
   end
 
   def ability_score
